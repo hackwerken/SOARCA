@@ -5,7 +5,6 @@ package http_test
 
 import (
 	"errors"
-	"fmt"
 	"soarca/internal/capability/http"
 	"soarca/models/cacao"
 	"soarca/models/execution"
@@ -62,11 +61,11 @@ func TestHTTPOptionsCorrectlyGenerated(t *testing.T) {
 		target,
 		cacao.VariableMap{"test": variable1})
 	if err != nil {
-		fmt.Println(err)
+		t.Log(err)
 		t.Fail()
 	}
 	assert.Equal(t, results["__soarca_http_result__"].Value, payload)
-	fmt.Println(results)
+	t.Log(results)
 
 	mock_http_request.AssertExpectations(t)
 }
@@ -111,11 +110,11 @@ func TestHTTPOptionsEmptyAuth(t *testing.T) {
 		target,
 		cacao.VariableMap{"test": variable1})
 	if err != nil {
-		fmt.Println(err)
+		t.Log(err)
 		t.Fail()
 	}
 	assert.Equal(t, results["__soarca_http_result__"].Value, payload)
-	fmt.Println(results)
+	t.Log(results)
 
 	mock_http_request.AssertExpectations(t)
 }
@@ -160,11 +159,11 @@ func TestHTTPOptionsEmptyCommand(t *testing.T) {
 		target,
 		cacao.VariableMap{"test": variable1})
 	if err == nil {
-		fmt.Println(err)
+		t.Log(err)
 		t.Fail()
 	}
 	assert.Equal(t, err, expected_error)
-	fmt.Println(results)
+	t.Log(results)
 
 	mock_http_request.AssertExpectations(t)
 }
