@@ -14,6 +14,7 @@ import (
 // Return response
 
 type HttpCapability struct {
+	soarca_http_request http.IHttpRequest
 }
 
 type Empty struct{}
@@ -25,6 +26,10 @@ func init() {
 	log = logger.Logger(component, logger.Info, "", logger.Json)
 }
 
+func New(httpRequest http.IHttpRequest) *HttpCapability {
+	return &HttpCapability{soarca_http_request: httpRequest}
+}
+
 func (httpCapability *HttpCapability) Execute(
 	metadata execution.Metadata,
 	command cacao.Command,
@@ -32,14 +37,13 @@ func (httpCapability *HttpCapability) Execute(
 	target cacao.AgentTarget,
 	variables cacao.VariableMap) (cacao.VariableMap, error) {
 
-	soarca_http_request := new(http.HttpRequest)
 	soarca_http_options := http.HttpOptions{
 		Target:  &target,
 		Command: &command,
 		Auth:    &authentication,
 	}
 
-	responseBytes, err := soarca_http_request.Request(soarca_http_options)
+	responseBytes, err := httpCapability.soarca_http_request.Request(soarca_http_options)
 	if err != nil {
 		log.Error(err)
 		return cacao.VariableMap{}, err
